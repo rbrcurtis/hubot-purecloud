@@ -15,7 +15,7 @@ config = require(process.cwd() + "/config")
 
 global.logError = => @robot.logger.error arguments...
 global.log = => console.log arguments...
-global.debug = => # @robot.logger.info arguments...
+global.debug = => #@robot.logger.info arguments...
 
 class Realtime extends EventEmitter
 
@@ -53,6 +53,9 @@ class PurecloudBot extends Adapter
     @makeClient()
 
     @realtime = new Realtime @client
+    
+    # Hack -- this should not be here but just trying to jump access to the realtime client
+    global.realtime = @realtime
 
     @setupControllers()
 
@@ -189,7 +192,7 @@ class PurecloudBot extends Adapter
       user = @robot.brain.userForId msg.from
       user.room = msg.from
     else 
-      user = @robot.brain.userForId msg.to
+      user = @robot.brain.userForId msg.from
       user.room = msg.to
 
     console.log 'message', 'user', user
