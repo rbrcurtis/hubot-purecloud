@@ -167,17 +167,14 @@ class PurecloudBot extends Adapter
       @realtime.sendMessage to, msg
 
   reply: (envelope, messages...) ->
-    log 'robot', 'send', arguments...
-
-    log 'full_message', messages
     for msg in messages
       unless msg then continue
       @robot.logger.debug "Sending to #{envelope.room or envelope.user?.id}: #{msg}"
-      log 'robot', 'send', envelope.user.id
 
       user_id = envelope.user?.id
 
       @realtime.sendMessage user_id, msg
+    null
 
   offline: =>
     @robot.logger.debug "Received offline event", @client.connect?
