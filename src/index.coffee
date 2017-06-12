@@ -20,13 +20,13 @@ global.debug = => # @robot.logger.info arguments...
 class Realtime extends EventEmitter
 
     constructor: (@client) ->
-    
+
     send: (stanza) ->
       debug 'stanza', 'out', stanza.toString()
       @client.send stanza
-    
+
     jid: null
-    
+
     debug: debug
 
     connected: false
@@ -75,7 +75,7 @@ class PurecloudBot extends Adapter
                 func.apply @controllers[name], args
               unless @realtime.connected
                 debug 'handle', 'deferring call to', funcName, @realtime.connected
-                return @realtime.once 'connect', => 
+                return @realtime.once 'connect', =>
                   debug 'handle', 'defer resolve', funcName
                   apply()
               else apply()
@@ -108,19 +108,19 @@ class PurecloudBot extends Adapter
     @options = options
 
     @connected = false
-    
+
     @client.connection.socket.setTimeout 0
 
     log 'jid is', @client.jid
 
     @client.on 'error', (error) => logError error
-    
+
     @client.on 'online', @onConnect
-    
-    @client.on 'offline', => 
+
+    @client.on 'offline', =>
       log 'offline', arguments...
       @realtime.emit 'disconnect'
-    
+
     @client.on 'stanza', @onStanza
 
     @client.on 'end', =>
@@ -129,7 +129,7 @@ class PurecloudBot extends Adapter
 
     @client
 
-  onConnect: ({jid}) => 
+  onConnect: ({jid}) =>
     log '***************** online', jid.toString(), jid.bare().toString()
     @realtime.jid = jid
     unless @realtime.connected
@@ -166,6 +166,19 @@ class PurecloudBot extends Adapter
 
       @realtime.sendMessage to, msg
 
+  reply: (envelope, messages...) ->
+    log 'robot', 'send', arguments...
+
+    log 'full_message', messages
+    for msg in messages
+      unless msg then continue
+      @robot.logger.debug "Sending to #{envelope.room or envelope.user?.id}: #{msg}"
+      log 'robot', 'send', envelope.user.id
+
+      user_id = envelope.user?.id
+
+      @realtime.sendMessage user_id, msg
+
   offline: =>
     @robot.logger.debug "Received offline event", @client.connect?
     @client.connect()
@@ -184,16 +197,14 @@ class PurecloudBot extends Adapter
 
     console.log 'message', 'got msg', msg, @options.username
 
-
+    user = @robot.brain.userForId msg.from
     if msg.type is 'person'
-      user = @robot.brain.userForId msg.from
       user.room = msg.from
-    else 
-      user = @robot.brain.userForId msg.to
+    else
       user.room = msg.to
 
     console.log 'message', 'user', user
-    
+
     @receive new TextMessage(user, msg.body)
 
 
