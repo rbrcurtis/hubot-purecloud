@@ -178,9 +178,9 @@ class PurecloudBot extends Adapter
     if msg.body?.match /nsfw/ then return
 
     if msg.body?.match(/^hubot leave$/) and msg.to?.match(/@conference/)
-      @realtime.sendMessage msg.to, 'Goodbye!'
-      @realtime.leaveRoom msg.to
-      @realtime.setInactive msg.to
+      @realtime.sendMessage msg.to, 'Goodbye!', =>
+        @realtime.leaveRoom msg.to
+        @realtime.setInactive msg.to
 
     console.log 'message', 'got msg', msg, @options.username
 
