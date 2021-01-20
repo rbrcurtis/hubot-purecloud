@@ -1,6 +1,6 @@
 {
   "name": "hubot-purecloud",
-  "version": "0.0.2",
+  "version": "0.2.1",
   "description": "Purecloud adapter for Hubot",
   "keywords": [
     "hubot",
@@ -14,7 +14,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/rbrcurtis/hubot-purecloud.git"
+    "url": "git://github.com/tylerhammer/hubot-purecloud.git"
   },
   "main": "./src/index",
   "dependencies": {
@@ -25,5 +25,17 @@
   },
   "devDependencies": {
     "hubot": "^2.13.2"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/tylerhammer/hubot-purecloud/issues"
+  },
+  "homepage": "https://github.com/tylerhammer/hubot-purecloud#readme",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
 }
