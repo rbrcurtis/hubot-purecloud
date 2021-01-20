@@ -117,7 +117,7 @@ class PurecloudBot extends Adapter
     
     @client.on 'online', @onConnect
     
-    @client.on 'offline', => 
+    @client.on 'offline', =>
       log 'offline', arguments...
       @realtime.emit 'disconnect'
     
@@ -156,7 +156,7 @@ class PurecloudBot extends Adapter
     null
 
   send: (envelope, messages...) ->
-    log 'robot', 'send', arguments...
+    #log 'robot', 'send', arguments...
 
     for msg in messages
       unless msg then continue
@@ -182,21 +182,20 @@ class PurecloudBot extends Adapter
         @realtime.leaveRoom msg.to
         @realtime.setInactive msg.to
 
-    console.log 'message', 'got msg', msg, @options.username
+    #console.log 'message', 'got msg', msg, @options.username
 
 
     if msg.type is 'person'
       user = @robot.brain.userForId msg.from
       user.room = msg.from
     else 
-      user = @robot.brain.userForId msg.to
+      user = @robot.brain.userForId msg.from
       user.room = msg.to
 
-    console.log 'message', 'user', user
+    #console.log 'message', 'user', user
     
     @receive new TextMessage(user, msg.body)
 
 
 exports.use = (@robot) ->
   new PurecloudBot @robot
-

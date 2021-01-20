@@ -1,4 +1,3 @@
-
 Controller = require './framework/Controller.coffee'
 
 module.exports = class ActiveChatController extends Controller
